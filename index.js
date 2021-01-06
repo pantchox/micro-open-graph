@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
   try {
     const { body: html } = await got(url, {
       headers: {
-        'user-agent': 'WhatsApp/2.19.81 A', // this works for twitter as well
+        'user-agent': 'WhatsApp/2.19.81 A' // this works for twitter as well
       }
     });
     data = await metascraper({ url, html })
@@ -56,7 +56,6 @@ module.exports = async (req, res) => {
     data = {error: true, message: `Connecting to "${url}" failed, Make sure your URL is correct or try again`};
   }
 
-  res.status(statusCode).send(data);
   // Cache results for 24 hours - not implmented
   if (statusCode === 200) {
   	cache.put(url, data, CACHE_IN_HOURS);
