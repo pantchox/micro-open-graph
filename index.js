@@ -24,7 +24,7 @@ const metascraper = require('metascraper').load([
 ])
 
 
-const TWENTY_FOUR_HOURS = 86400000
+const CACHE_IN_HOURS = 86400000 // 24 hours
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
