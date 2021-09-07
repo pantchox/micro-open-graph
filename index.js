@@ -40,11 +40,16 @@ module.exports = async (req, res) => {
 
   // if proxy then pipe request
   if (proxy) {
-      return got.stream(url, {}).pipe(res).on('finish', () => {
+    try {
+        got.stream(url, {}).pipe(res).on('finish', () => {
           res.end();
       }).on('error', () => {
           return send(res, 400, { error: true, message: 'could not proxy url' })
       });
+    } catch (e) {
+        return send(res, 400, { error: true, message: 'could not proxy url' })
+    }
+    return;
   }
 
   const cachedResult = cache.get(url)
