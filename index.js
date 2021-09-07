@@ -42,6 +42,8 @@ module.exports = async (req, res) => {
   if (proxy) {
       return got.stream(url, {}).pipe(res).on('finish', () => {
           res.end();
+      }).on('error', () => {
+          return send(res, 400, { error: true, message: 'could not proxy url' })
       });
   }
 
