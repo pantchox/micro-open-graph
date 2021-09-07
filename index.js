@@ -29,13 +29,20 @@ const CACHE_IN_HOURS = 86400000 // 24 hours
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
 
-  let { query: { url } } = parse(req.url, true)
+  let { query: { url, proxy = false } } = parse(req.url, true)
   if (!url) return send(res, 400, { error: true, message: 'url query param required!' })
 
   // validate url
   if (!url.toLowerCase().includes('http')) {
       // it means http or https is not included, we should add https
       url = `https://${url}`;
+  }
+
+  // if proxy then pipe request
+  if (proxy) {
+      return got.stream(url, {}).pipe(res).on('finish', () => {
+          res.end();
+      });
   }
 
   const cachedResult = cache.get(url)
